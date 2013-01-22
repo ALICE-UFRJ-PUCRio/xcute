@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import br.uniriotec.xcute.busines.service.IKipProcessService;
-import br.uniriotec.xcute.web.form.KipFormBean;
 
 @Service
 public class AbstractController {

@@ -37,16 +37,24 @@ public class KipProcessDataBaseMock {
 		Collection<KnowledgeIntensiveActivity> act1 = new ArrayList<KnowledgeIntensiveActivity>();
 		int i = 0;
 		act1.add(new KnowledgeIntensiveActivity(++i, "Definir objetivo"));
-		act1.add(new KnowledgeIntensiveActivity(++i, "Adiquirir conhecimento do negÃ³cio"));
+		act1.add(new KnowledgeIntensiveActivity(++i, "Adiquirir conhecimento do neg—cio"));
 		act1.add(new KnowledgeIntensiveActivity(++i, "Coletar requisitos de stakeholders"));
 		act1.add(new KnowledgeIntensiveActivity(++i, "Discutir requisito"));
+		
+		act1.add(new KnowledgeIntensiveActivity(++i, "Realizar entrevista"));
+		act1.add(new KnowledgeIntensiveActivity(++i, "Realizar din‰micas de grupo"));
+		act1.add(new KnowledgeIntensiveActivity(++i, "Realizar oficinas"));
+		act1.add(new KnowledgeIntensiveActivity(++i, "Brainstorming"));
+		act1.add(new KnowledgeIntensiveActivity(++i, "Discutir requisito"));
+		
+		act1.add(new KnowledgeIntensiveActivity(++i, "Aplicar question‡rio"));
 		act1.add(new KnowledgeIntensiveActivity(++i, "Priorizar requisito"));
 		act1.add(new KnowledgeIntensiveActivity(++i, "Realizar acordo de requisitos"));
 		act1.add(new KnowledgeIntensiveActivity(++i, "Conduzir Entrevista"));
-		act1.add(new KnowledgeIntensiveActivity(++i, "Simular CenÃ¡rio"));
-		act1.add(new KnowledgeIntensiveActivity(++i, "Realizar observaÃ§Ã£o e anÃ¡lise social"));
-		act1.add(new KnowledgeIntensiveActivity(++i, "Desenvolver protÃ³tipo"));
-		MEMORY_ACTIVITY_DB.put(1, act1);
+		act1.add(new KnowledgeIntensiveActivity(++i, "Simular Cen‡rio"));
+		act1.add(new KnowledgeIntensiveActivity(++i, "Realizar observa‹o e an‡lise social"));
+		act1.add(new KnowledgeIntensiveActivity(++i, "Desenvolver prot—tipo"));
+		MEMORY_ACTIVITY_DB.put(1, act1); 
 	}
 	
 	
@@ -60,7 +68,7 @@ public class KipProcessDataBaseMock {
 		MEMORY_KIPS_DB.add(f);
 		KnowledgeIntensiveProcess g = new KnowledgeIntensiveProcess(++i, "Gerenciamento de Conformidade Regulamentar");
 		MEMORY_KIPS_DB.add(g);
-		KnowledgeIntensiveProcess h = new KnowledgeIntensiveProcess(++i, "RelatÃ³rios de Falhas e ResoluÃ§Ã£o de Defeitoso");
+		KnowledgeIntensiveProcess h = new KnowledgeIntensiveProcess(++i, "Relat—rios de Falhas e Resolu‹o de Defeitoso");
 		MEMORY_KIPS_DB.add(h);
 	} 
 	
