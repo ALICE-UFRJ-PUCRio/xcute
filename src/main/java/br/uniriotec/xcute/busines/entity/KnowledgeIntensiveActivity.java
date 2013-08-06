@@ -1,5 +1,7 @@
 package br.uniriotec.xcute.busines.entity;
 
+import java.util.List;
+
 public class KnowledgeIntensiveActivity {
 
 	private Integer id;
@@ -7,6 +9,10 @@ public class KnowledgeIntensiveActivity {
 	private String name;
 	
 	private boolean colaborative;
+	
+	private List<ColaborationInfo> collaborationInfo;
+
+	private List<GroupwareRecomendation> groupwareRecomendation;
 	
 	public KnowledgeIntensiveActivity() {
 	}
@@ -74,6 +80,22 @@ public class KnowledgeIntensiveActivity {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+
+	public List<ColaborationInfo> getCollaborationInfo() {
+		return collaborationInfo;
+	}
+
+	public void setCollaborationInfo(List<ColaborationInfo> collaborationInfo) {
+		this.collaborationInfo = collaborationInfo;
+	}
+
+	public void setGroupwareRecomendation(List<GroupwareRecomendation> groupwareRecomendation) {
+		this.groupwareRecomendation = groupwareRecomendation;
+	}
+
+	public List<GroupwareRecomendation> getGroupwareRecomendation() {
+		return groupwareRecomendation;
 	}
 	
 	

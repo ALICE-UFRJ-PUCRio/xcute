@@ -1,16 +1,17 @@
 package br.uniriotec.xcute.busines.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.uniriotec.xcute.busines.entity.ColaborationInfo;
 import br.uniriotec.xcute.busines.entity.ComunicationInfo;
 import br.uniriotec.xcute.busines.entity.KnowledgeIntensiveActivity;
 import br.uniriotec.xcute.busines.entity.KnowledgeIntensiveProcess;
 import br.uniriotec.xcute.busines.persistence.IKipProcessDAO;
 import br.uniriotec.xcute.busines.service.IKipProcessService;
+import br.uniriotec.xcute.busines.service.IRecomendationService;
 
 
 @Service
@@ -18,6 +19,9 @@ public class KipProcessService implements IKipProcessService {
 
 	@Autowired
 	private IKipProcessDAO kipProcessDAO;
+	
+	@Autowired
+	private IRecomendationService recomendationService;
 	
 	@Override
 	public List<KnowledgeIntensiveProcess> findAll() {
@@ -46,7 +50,10 @@ public class KipProcessService implements IKipProcessService {
 
 	@Override
 	public KnowledgeIntensiveActivity getKia(Integer id) {
-		return this.kipProcessDAO.getKiaByKey(id); 
+		KnowledgeIntensiveActivity kiaByKey = this.kipProcessDAO.getKiaByKey(id);
+		kiaByKey.setCollaborationInfo(this.recomendationService.getCollaborationInfo(id));
+		kiaByKey.setGroupwareRecomendation(this.recomendationService.getRecomendation());
+		return kiaByKey; 
 	}
 
 	@Override

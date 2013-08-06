@@ -16,4 +16,5 @@ public interface IKipProcessService {
 	
 	List<ComunicationInfo> getCardinality(Integer id);
 	
+	
 }

@@ -38,7 +38,6 @@
 		where ac.knowledgeintensiveprocessid = #{id}
 	</select>
 
-
 		<!-- 
 			  Discover if this activity is collaborative or not.
 		      It is true if there are others than the one who is

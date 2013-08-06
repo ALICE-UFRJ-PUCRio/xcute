@@ -14,14 +14,93 @@
 		<result property="cardinality"  column="cadinality" />
 	</resultMap>
 	
-	
-	<resultMap id="colaborationSessionResult" type="ColaborationInfo">
+	<resultMap id="collaborationResultBase" type="ColaborationInfo" >
 		<id property="id" column="id" />
 		<result property="description" column="description" />
 	</resultMap>
+	
+	<resultMap id="colaborationSessionResult" type="ColaborationInfo" extends="collaborationResultBase">
+ 		<result property="participationDescription" column="participation_desc" />
+		<result property="resourceType" column="resource_type" />
+	</resultMap>
+	
+	<resultMap id="agentComunicationResult" type="ColaborationInfo" extends="collaborationResultBase">
+ 		<result property="agentName" column="agent_name" />
+	</resultMap>
+	
+	<resultMap id="socializationInfoResult" type="ColaborationInfo" extends="agentComunicationResult">
+ 		<result property="syncronous" column="syncrounous" />
+	</resultMap>
+	
+	<resultMap id="decisionInfoResult" type="ColaborationInfo" extends="agentComunicationResult">
+ 		<result property="syncronous" column="speciality_name" />
+	</resultMap>
+	
+	<!-- DECISAO, ALTERNATIVA E QUESTÃO -->
+	<select id="getDecisionInfo" parameterType="int" resultMap="decisionInfoResult">
+		SELECT CONCAT('para as decisoes envolvidas nesta KIA serao necessarios: agente: ',
+			ag.name, ', especialidade: ', sp.name) description, 
+			ag.name agent_name, 
+			sp.name speciality_name,
+			kia.al_id id 
+		from alternative_has_speciality alsp
+		inner join alternative al on al.id = alsp.alternative_id
+		inner join speciality sp on sp.id = alsp.speciality_id
+		inner join inovationagent ia on ia.id = sp.inovationagent_id
+		inner join agent ag on ag.id = ia.id
+		inner join (
+			select kia.agent_id ag, al.id al_id
+			from knowledgeintensiveactivity kia
+			inner join decision dc on dc.kia_activity_id = kia.activity_id
+			inner join alternative al on al.id = dc.id
+			where kia.activity_id = #{id}
+			) kia on kia.al_id = al.id;
+	</select>
+	
+	
+	<!-- SOCIALIZACÃO -->
+    <select id="getSocializationInfo" parameterType="int" resultMap="socializationInfoResult">
+	    select concat('socializacao', 
+	       case when syncrounous = 1 then 'síncrona' when syncrounous = 0 then 'assíncrona' else '' end,  
+	       '. Responsavel pela atividade: ', ag.name) description, 
+	       syncrounous, ag.name agent_name,  sc.collaborativesession_id id
+		from socialization sc
+		inner join activity ac on ac.id = sc.comunicativeinteraction_id
+		inner join agent ag on ag.id = agentid
+		where sc.collaborativesession_id = #{id};
+    </select>
 
-   <select id="getColaborativeSessionInfo" parameterType="int" resultMap="colaborationSessionResult">
-	   	select concat('esta é uma sessão colaborativa') description, 
+
+    <!-- AGENTES ENVOLVIDOS NA COMUNICACAO -->
+    <select id="getAgentsInComunication" parameterType="int" resultMap="agentComunicationResult">
+		select concat('agente: ', a.name) description, a.name  agent_name, c.comunicativeinteraction_id id 
+		from  comunicativeinteraction ci
+		inner join comunication c on ci.complexaction_id = c.comunicativeinteraction_id
+		inner join agent a on a.id = sender_agent_id
+		where c.comunicativeinteraction_id = #{id}; 
+    </select>
+
+	<!-- ATIVIDADES QUE TEM PARTICIPACAO DE RECURSOS -->
+    <select id="getResourceParticipation" parameterType="int" resultMap="colaborationSessionResult">
+        select concat('tipo de participacao: ', ' ', p.description,', recurso utilizado: ', r.resourcetype)
+        		description	,
+			 p.description participation_desc, r.resourcetype resource_type, ac.id 
+		from activity ac
+		inner join knowledgeintensiveactivity kia on ac.id = kia.activity_id
+		inner join complexaction ca on ca.id = ac.id
+		inner join participation p on p.complexaction_id = ca.id
+		inner join resourceparticipation rs on p.id = rs.participation_id
+		inner join resource r on r.id = rs.resource_id
+		where ac.id  in(
+			select complexaction_id
+			from participation
+			)
+		and ac.id = #{id};
+    </select>
+    
+	<!-- SESSAO COLABORATIVA -->
+   <select id="getColaborativeSessionInfo" parameterType="int" resultMap="collaborationResultBase">
+	   	select concat('sessao colaborativa') description, 
 	   		    ac.id id
 		from collaborativesession cs
 		inner join COLLABORATIVESESSION_HAS_PROTOCOL cHP on cs.id = chp.collaborativesession_id
@@ -31,6 +110,8 @@
 		where ac.id = #{id};
    </select>
    
+   
+   <!-- REGRA DE CARDINALIDADE -->
 	<select id="getCardinality" parameterType="int" resultMap="comunicationResult" > 
 		select ci.complexaction_id comunicativeinteraction_id,
 		   ac.name comunicativeinteraction_name, 

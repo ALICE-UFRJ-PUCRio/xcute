@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
+import br.uniriotec.xcute.busines.entity.ColaborationInfo;
 import br.uniriotec.xcute.busines.entity.ComunicationInfo;
 import br.uniriotec.xcute.busines.entity.KnowledgeIntensiveActivity;
 import br.uniriotec.xcute.busines.entity.KnowledgeIntensiveProcess;
@@ -20,18 +21,22 @@ public class Test {
 		SqlSessionFactory sql = MyBatisConnectionFactory.getSqlSessionFactory();
 		SqlSession session = sql.openSession();
 		try {
-			//testKIPMapper(session);
 			ICollaborationRuleMapper crm = session.getMapper(ICollaborationRuleMapper.class);
-			List<ComunicationInfo> list = crm.getCardinality(5);
-			for (ComunicationInfo colaborationInfo : list) {
-				System.out.println(colaborationInfo); 
+			List<ColaborationInfo> list = crm.getDecisionInfo(1);
+			for (ColaborationInfo colaborationInfo : list) {
+				System.out.println("soci: "+ colaborationInfo);
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		
-		
-		
+	}
+
+	private static void testCardinality(SqlSession session) {
+		ICollaborationRuleMapper crm = session.getMapper(ICollaborationRuleMapper.class);
+		List<ComunicationInfo> list = crm.getCardinality(5);
+		for (ComunicationInfo colaborationInfo : list) {
+			System.out.println(colaborationInfo); 
+		}
 	}
 
 	private static void testKIPMapper(SqlSession session) {
@@ -46,10 +51,6 @@ public class Test {
 		System.out.println("fim");
 		System.out.println(mapper.isSocialization(1));
 		System.out.println((mapper.getCardinality(1).size() == 2 )+ " infact there is two");
-//			System.out.println("=========");
-//			mapper  = session.getMapper(IKIPMapper.class);
-//			mapper.list().size();
-//			
 	}
 
 	private static void printList(IKIPMapper mapper) {
