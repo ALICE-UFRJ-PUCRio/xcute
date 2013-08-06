@@ -18,7 +18,7 @@
 		
 		
 	  <div class="hero-unit">
-            <h3>${kip.nome}</h3>
+            <h3>${kip.process}</h3>
             
              <c:if test="${empty kip.id}">
             <h3>Execu&ccedil;&atilde;o de processos intensivos em conhecimento</h3>
@@ -53,7 +53,7 @@
                    <thead>
                       <tr>
                          <th>Id</th>
-                         <th>Nome</th>
+                         <th>Process</th>
                       </tr>
                    </thead>
 	               <tbody>

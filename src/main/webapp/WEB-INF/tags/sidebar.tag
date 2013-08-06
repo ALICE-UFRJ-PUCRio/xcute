@@ -10,7 +10,7 @@
 				<li class="nav-header">Menu</li>
 				<c:forEach var="proc" items="${processes}" varStatus="status">
 			<c:url var="url" value="/designer/${proc.id}"  ></c:url>
-					<li ><a  href="${url}">${proc.nome}</a></li>
+					<li ><a  href="${url}">${proc.process}</a></li>
 				</c:forEach>
 			</f:form>
 		</ul>

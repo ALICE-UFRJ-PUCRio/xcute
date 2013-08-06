@@ -2,7 +2,6 @@ package br.uniriotec.xcute.web.controller;
 
 import java.util.Locale;
 
-import org.drools.runtime.StatefulKnowledgeSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +24,6 @@ public class ProcessController  extends AbstractController {
 	
 	@Autowired
 	private IKipProcessService kipProcessService;
-	
-	@Autowired
-	private StatefulKnowledgeSession ksession;
 	
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -54,9 +50,16 @@ public class ProcessController  extends AbstractController {
 	public String show(@PathVariable("id")Integer id, Model model){
        model.addAttribute("idSelected", id);
 	   model.addAttribute("kip",kipProcessService.get(id));
-	   ksession.startProcess("com.sample.bpmn");
 	   return dispatchResponse(model, "/designer/designer");
 	}
+	
+	@RequestMapping(value = "designer/recomendation/{id}")
+	public String showRecomendation(@PathVariable("id")Integer id, Model model){
+       model.addAttribute("idSelected", id);
+	   model.addAttribute("kia",kipProcessService.getKia(id)); 
+	   return dispatchResponse(model, "/designer/recomendation");
+	}
+	
 	
 	public IKipProcessService getKipProcessService() {
 		return kipProcessService;
@@ -66,14 +69,4 @@ public class ProcessController  extends AbstractController {
 		this.kipProcessService = kipProcessService;
 	}
 
-
-	public StatefulKnowledgeSession getKsession() {
-		return ksession;
-	}
-
-
-	public void setKsession(StatefulKnowledgeSession ksession) {
-		this.ksession = ksession;
-	}
-	
 }

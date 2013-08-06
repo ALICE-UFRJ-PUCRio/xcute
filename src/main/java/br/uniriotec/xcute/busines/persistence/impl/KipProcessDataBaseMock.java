@@ -14,7 +14,6 @@ public class KipProcessDataBaseMock {
 	private  Map<Integer, Collection<KnowledgeIntensiveActivity>> MEMORY_ACTIVITY_DB; 
 	
 	private  List<KnowledgeIntensiveProcess> MEMORY_KIPS_DB;
-	
 	{
 		MEMORY_ACTIVITY_DB = new HashMap<Integer, Collection<KnowledgeIntensiveActivity>>();
 		MEMORY_KIPS_DB = new ArrayList<KnowledgeIntensiveProcess>();

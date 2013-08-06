@@ -21,15 +21,6 @@
 
 
 
- <jbpm:kbase id="kbase">
-    <jbpm:resources>
-      <jbpm:resource type="BPMN2" source="classpath:kip.bpmn"/>
-    </jbpm:resources>
-  </jbpm:kbase>
-		
-  <jbpm:ksession id="ksession" type="stateful" kbase="kbase" />
-		
-		
 		
 		
 </beans>

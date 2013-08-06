@@ -6,17 +6,17 @@ public class KnowledgeIntensiveProcess {
 	
 	private Integer id;
 	
-	private String nome;
+	private String process;
 	
 	private Collection<KnowledgeIntensiveActivity> knowledgeIntensiveActivities;
 
 	public KnowledgeIntensiveProcess() {
 	}
 	
-	public KnowledgeIntensiveProcess(Integer id, String nome) {
+	public KnowledgeIntensiveProcess(Integer id, String process) {
 		super();
 		this.id = id;
-		this.nome = nome;
+		this.process = process;
 	}
 
 	public Integer getId() {
@@ -27,13 +27,6 @@ public class KnowledgeIntensiveProcess {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
 
 	public Collection<KnowledgeIntensiveActivity> getKnowledgeIntensiveActivities() {
 		return knowledgeIntensiveActivities;
@@ -42,6 +35,14 @@ public class KnowledgeIntensiveProcess {
 	public void setKnowledgeIntensiveActivities(
 			Collection<KnowledgeIntensiveActivity> knowledgeIntensiveActivities) {
 		this.knowledgeIntensiveActivities = knowledgeIntensiveActivities;
+	}
+
+	public String getProcess() {
+		return process;
+	}
+
+	public void setProcess(String process) {
+		this.process = process;
 	}
 	
 

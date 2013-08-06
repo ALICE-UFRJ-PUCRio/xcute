@@ -5,6 +5,12 @@
 <%@ page session="true"%>
 <html>
 <head>
+<style type="text/css">
+   .title {
+      color: 0088cc;
+   }
+</style>
+
 <title>Home</title>
 
 </head>
@@ -18,7 +24,7 @@
 		
 		
 	  <div class="hero-unit">
-            <h3>${kip.nome}</h3>
+            <h3>${kip.process}</h3>
 
             <c:if test="${empty kip.id}">
             <h3>Configuração de processos intensivos em conhecimento</h3>
@@ -50,15 +56,29 @@
                    <thead>
                       <tr>
                          <th>Id</th>
-                         <th>Nome</th>
+                         <th>Process</th>
                       </tr>
                    </thead>
 	               <tbody>
+ 
+                     <c:url var="colab" value="/resources/img/Users-Image.png" />
 	                 <c:forEach var="act" items="${kip.knowledgeIntensiveActivities}"  >
-			               <tr>
-			                  <td>${act.id}</td>
-			                  <td><a  >${act.name}</a>   </td>
-			               </tr>
+			               <c:if test="${not empty act.name}">
+				               <tr>
+				                  <td> <span class="title"> ${act.id}</span> </td>
+				                  <td>
+				                 <span class="title"> ${act.name}</span>
+				                  </td>
+				                   <td>
+				                   <c:if test="${act.colaborative eq true}">
+				                   <c:url var="colabUrl" value="recomendation/${act.id}"   />
+				                    	<a href="${colabUrl}">
+				                    		<img src="${colab}" alt="imagem" width="32" height="32" />
+				                    	</a>	
+				                    </c:if>
+				                   </td>
+				               </tr>
+			               </c:if>
 	                 </c:forEach>
 	               </tbody>
             	</table>
