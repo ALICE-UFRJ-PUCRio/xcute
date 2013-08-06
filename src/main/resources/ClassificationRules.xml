@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ClassificationRules">
+ 
+	<resultMap id="comunicationResult" type="ComunicationInfo">
+		<id property="activityId" column="comunicativeinteraction_id" />
+		<result property="activityName"  column="comunicativeinteraction_name" />
+		<result property="kiaAgentId"  column="kia_agent" />
+		<result property="comunicationAgentId"  column="agent_comunication_id" />
+		<result property="comunicationAgentName"  column="agent_comunication_name" />
+		<result property="cardinality"  column="cadinality" />
+	</resultMap>
+	
+	
+	<resultMap id="colaborationSessionResult" type="ColaborationInfo">
+		<id property="id" column="id" />
+		<result property="description" column="description" />
+	</resultMap>
+
+   <select id="getColaborativeSessionInfo" parameterType="int" resultMap="colaborationSessionResult">
+	   	select concat('esta é uma sessão colaborativa') description, 
+	   		    ac.id id
+		from collaborativesession cs
+		inner join COLLABORATIVESESSION_HAS_PROTOCOL cHP on cs.id = chp.collaborativesession_id
+		inner join protocol p on p.id = chp.protocol_id
+		inner join ACTIONCONTRIBUTION_HAS_PROTOCOL AHP on ahp.protocol_id = p.id
+		inner join ACTIONCONTRIBUTION AC on ac.id = ahp.actioncontribution_id
+		where ac.id = #{id};
+   </select>
+   
+	<select id="getCardinality" parameterType="int" resultMap="comunicationResult" > 
+		select ci.complexaction_id comunicativeinteraction_id,
+		   ac.name comunicativeinteraction_name, 
+		   kia.agent_id kia_agent,
+		   ag.id agent_comunication_id,
+		   ag.name agent_comunication_name,
+	       case 
+	          when (sa.agent_id is not null) 
+	          then 'Muitos' 
+	          else 'Um' 
+		   end  cadinality
+		from comunicativeinteraction ci
+		inner join activity ac on ac.id = ci.complexaction_id
+		left outer join knowledgeintensiveactivity  kia on kia.activity_id = ac.id
+		inner join comunication cm on ci.complexaction_id = cm.comunicativeinteraction_id
+		inner join agent ag on ag.id = cm.sender_agent_id
+		left outer join socialagent sa on ag.id = sa.agent_id
+		where ci.complexaction_id = #{id};
+	</select>
+
+
+
+</mapper>

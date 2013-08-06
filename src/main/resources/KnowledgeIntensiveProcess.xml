@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="KnowledgeIntensiveProcess">
+
+	<resultMap id="resultKIP" type="KnowledgeIntensiveProcess">
+		<id property="id" column="id" />
+		<result property="process" column="process" />
+		<collection property="knowledgeIntensiveActivities"
+			javaType="ArrayList" ofType="KnowledgeIntensiveActivity" select="selectKIAs"
+			column="id" resultMap="resultKIA" />
+	</resultMap>
+
+	<resultMap id="resultKIA" type="KnowledgeIntensiveActivity">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="colaborative"  column="colaborative" />
+	</resultMap>
+
+	<select id="list" resultMap="resultKIP">
+		SELECT id, process FROM
+		KnowledgeIntensiveProcess
+	</select>
+
+	<select id="getById" parameterType="int" resultMap="resultKIP">
+		SELECT id,
+		process FROM KnowledgeIntensiveProcess WHERE id = #{id}
+	</select>
+
+	<select id="selectKIAs" parameterType="int"
+		resultType="KnowledgeIntensiveActivity">
+		select ac.id as id, ac.name as name, (kia.activity_id %2)=0 as colaborative
+		from activity ac
+		inner join knowledgeintensiveactivity kia on ac.id =
+		kia.activity_id
+		where ac.knowledgeintensiveprocessid = #{id}
+	</select>
+
+
+		<!-- 
+			  Discover if this activity is collaborative or not.
+		      It is true if there are others than the one who is
+		      executing the KIA as specialist of the target alternative
+		      in the decision.
+		      
+		      Here is the rule:
+		         1. Some Kias involve decisions and in its turn consider alternatives
+		         2. Innovation agents has specialities regard to some alternatives
+		         3. When those alternatives are related to that Kia we can infere
+		         	which agent is suitble to help this particular Kia
+		         4. If the agent who is conducting the Kia is not the specialist in 	
+		 -->
+	
+	<select id="isCollaborativeActivity" parameterType="int" resultType="boolean" >
+		SELECT CASE WHEN count(*) > 0 THEN 1 ELSE 0 END
+		from alternative_has_speciality alsp
+		inner join alternative al on al.id = alsp.alternative_id
+		inner join speciality sp on sp.id = alsp.speciality_id
+		inner join inovationagent ia on ia.id = sp.inovationagent_id
+		inner join agent ag on ag.id = ia.id
+		inner join (
+			select kia.agent_id ag, al.id al_id
+			from knowledgeintensiveactivity kia
+			inner join decision dc on dc.kia_activity_id = kia.activity_id
+			inner join alternative al on al.id = dc.id
+			where kia.activity_id = #{id}
+			) kia on kia.al_id = al.id
+		where kia.ag <![CDATA[ <> ]]> ia.id;
+    </select>
+
+
+	<select id="selectKIA" parameterType="int"  resultMap="resultKIA">
+		select ac.id as id, ac.name as name,(kia.activity_id %2)=0 as colaborative 
+		from KnowledgeIntensiveActivity kia
+		right outer join activity ac on kia.activity_id = ac.id
+		where activity_id = #{id}
+		or ac.id = #{id};
+	</select>
+	
+
+	<select id="isSocialization" parameterType="int"  resultType="boolean"> 
+		select case when count(*) > 0 then 1 else 0 end
+		from socialization soc
+		inner join activity ac on ac.id = soc.comunicativeinteraction_id
+		where ac.id = #{id}; 
+	</select>
+	
+	<select id="isCollaborativeSession" parameterType="int" resultType="boolean">
+		select case when count(*) > 0 then 1 else 0 end
+		from collaborativesession cs 
+		inner join COLLABORATIVESESSION_HAS_PROTOCOL cHP on cs.id =
+		chp.collaborativesession_id
+		inner join protocol p on p.id = chp.protocol_id
+		inner join ACTIONCONTRIBUTION_HAS_PROTOCOL AHP on ahp.protocol_id = p.id
+		inner join ACTIONCONTRIBUTION AC on ac.id = ahp.actioncontribution_id
+		where ac.id = #{id};
+	</select>
+	
+</mapper>
