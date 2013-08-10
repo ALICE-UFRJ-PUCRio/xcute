@@ -29,6 +29,14 @@ public enum Cardinality {
 		this.value = value;
 	}
 
+	public boolean isIn(Cardinality...values){
+		for (Cardinality cardinality : values) {
+			if(cardinality.equals(this))
+				return true;
+		}
+		return false;
+	}
+	
 	public static void addInteraction(String card){
 		list.add(map.get(card));
 	}

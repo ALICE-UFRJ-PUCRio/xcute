@@ -1,4 +1,4 @@
-package br.uniriotec.xcute.busines.service.impl;
+package br.uniriotec.xcute.busines.strategy;
 
 import java.util.List;
 
@@ -8,18 +8,18 @@ import br.uniriotec.xcute.busines.entity.ColaborationInfo;
 import br.uniriotec.xcute.busines.entity.ComunicationInfo;
 import br.uniriotec.xcute.util.Cardinality;
 
-public class RecommendationParser {
+public class RecommendationHelper {
 
 	private static final String EMPTY_STRING = "";  
 	private List<ComunicationInfo> communicationInfos;
 	private List<ColaborationInfo> colaborationInfos;
 
-	private RecommendationParser() {
+	private RecommendationHelper() {
 	}
 
-	public static RecommendationParser getInstance(){
+	public static RecommendationHelper getInstance(){
 		Cardinality.clear();
-		return new RecommendationParser();
+		return new RecommendationHelper();
 	}
 	
 	public void setCollaborationInfos(final List<ColaborationInfo> colaborationInfos){

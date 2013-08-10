@@ -10,7 +10,8 @@ import br.uniriotec.xcute.busines.entity.ColaborationInfo;
 import br.uniriotec.xcute.busines.entity.GroupwareRecomendation;
 import br.uniriotec.xcute.busines.persistence.ICollaborationRuleDAO;
 import br.uniriotec.xcute.busines.service.IRecomendationService;
-import br.uniriotec.xcute.util.Cardinality;
+import br.uniriotec.xcute.busines.strategy.CommunicationStrategy;
+import br.uniriotec.xcute.busines.strategy.RecommendationHelper;
 
 @Service
 public class RecomendationService implements IRecomendationService {
@@ -38,23 +39,12 @@ public class RecomendationService implements IRecomendationService {
 
 	@Override
 	public List<GroupwareRecomendation> getRecomendation() {
-		RecommendationParser parser = RecommendationParser.getInstance();
-		parser.setCollaborationInfos(colaborationInfos);
-		parser.setCommunicationInfos(collaborationRuleDAO.getCardinality(activityId));
- 		Boolean sync = parser.isCollaborationSyncronous();
- 		System.out.println("Sincrono: " +sync); 
- 		String messageType = parser.getMessageType();
- 		System.out.println("Message type " + messageType ); 
- 		Cardinality result = parser.getCommunicationCardinality();
- 		System.out.println("Cardinality: "+ result);
- 		Cardinality.clear();
- 		
- 		//identifica comunicao
-		//identifica cooperacao
-		//identifica coordenaçao
- 		
-		
-		return null;
+		RecommendationHelper helper = RecommendationHelper.getInstance();
+		helper.setCollaborationInfos(colaborationInfos);
+		helper.setCommunicationInfos(collaborationRuleDAO.getCardinality(activityId));
+		CommunicationStrategy communication = CommunicationStrategy.getCommunicationStrategy(helper);
+		List<GroupwareRecomendation> recommendation = communication.recomend();
+		return recommendation;
 	}
 	
 		
