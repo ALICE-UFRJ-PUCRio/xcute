@@ -37,6 +37,20 @@
  		<result property="syncronous" column="speciality_name" />
 	</resultMap>
 	
+	<resultMap id="recomendationResult" type="GroupwareRecomendation" >
+		<id property="id" column="service_id" />
+ 		<result property="serviceName" column="service_name" />
+ 		<result property="idServiceCategory" column="cat_id" />
+ 		<result property="description" column="category" />
+	</resultMap>
+	
+	<resultMap id="categoryResult" type="ServiceCategory" >
+		<id property="id" column="category_id" />
+ 		<result property="description" column="description" />
+ 		<result property="parent" column="parent" />
+	</resultMap>	
+	
+	
 	<!-- DECISAO, ALTERNATIVA E QUESTÃO -->
 	<select id="getDecisionInfo" parameterType="int" resultMap="decisionInfoResult">
 		SELECT CONCAT('agente de inovacao envolvido em decisao') description, 
@@ -135,6 +149,25 @@
 		where ci.complexaction_id = #{id};
 	</select>
 
+
+	<select id="getServiceByCategory" parameterType="HashMap"  resultMap="recomendationResult"  >
+		select s.id service_id, c.id cat_id, c.description category, s.servicename service_name
+		from wgwsoa_category c
+		inner join wgwsoa_service_has_category sc on c.id = sc.category_id
+		inner join wgwsoa_service s  on s.id = sc.service_id
+		left outer join wgwsoa_language l on l.id = c.wgwsoa_language_id
+		where c.description = #{category}
+		and l.description = #{language};
+	</select>
+	
+
+	<select id="getCategoryChildren" parameterType="int" resultMap="categoryResult"> 
+			select c.id category_id,
+			   c.description description,
+			   c.parent parent
+		from wgwsoa_category c
+		where c.parent = #{id};
+	</select>
 
 
 </mapper>

@@ -16,6 +16,10 @@
 		   alias="ComunicationInfo" />
 		 <typeAlias type="br.uniriotec.xcute.busines.entity.ColaborationInfo"
 		   alias="ColaborationInfo" />
+		 <typeAlias type="br.uniriotec.xcute.busines.entity.GroupwareRecomendation"
+		   alias="GroupwareRecomendation" />		
+		 <typeAlias type="br.uniriotec.xcute.busines.entity.ServiceCategory"
+		   alias="ServiceCategory" />		
 	</typeAliases>
 	
 	<environments default="development">

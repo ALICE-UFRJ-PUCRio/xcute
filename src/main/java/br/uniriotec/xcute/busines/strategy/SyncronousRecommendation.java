@@ -1,22 +1,35 @@
 package br.uniriotec.xcute.busines.strategy;
 
-import br.uniriotec.xcute.util.Cardinality;
+import java.util.List;
 
-public class SyncronousRecommendation extends CommunicationStrategy {
+import br.uniriotec.xcute.busines.entity.GroupwareRecomendation;
 
-	public SyncronousRecommendation(RecommendationHelper helper) {
-		super(helper);
-	}
 
-	public void run() {
-		if(helper.getCommunicationCardinality().isIn(Cardinality.MUITOS_MUITOS, Cardinality.UM_MUITOS))
-			//neste ponto a comunicacao Ž sincrona
-			//e Ž de muitos para muitos
-			//entao a recomendacao Ž conferencia
-			
-			;
-	}
+
+public class SyncronousRecommendation extends CommunicationFactory {
 
 	
+	private static final String CONFERENCIA = "conferencia";
+	private static final String DIALOGO = "dialogo";
+	
+	
+	public SyncronousRecommendation(RecommendationHelper helper) {
+		super(helper);
+		System.out.println("I am syncrounous and I am running now!");
+	}
+
+	public void configure() {
+		
+		if(isUserMultipleInteraction())
+			setServiceCategory(CONFERENCIA); 
+		else
+			setServiceCategory(DIALOGO);
+		 
+	}
+	
+	@Override
+	protected List<GroupwareRecomendation> getServiceRecomendation() {
+		return helper.getCollaborationRuleDAO().getServiceByCategory(map);
+	}
 	
 }

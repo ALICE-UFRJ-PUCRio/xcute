@@ -7,6 +7,8 @@ public class GroupwareRecomendation {
 	private String serviceName;
 	
 	private String description;
+	
+	private Integer idServiceCategory;
 
 	public Integer getId() {
 		return id;
@@ -32,6 +34,23 @@ public class GroupwareRecomendation {
 		this.description = description;
 	}
 
-	
-	
+	public Integer getIdServiceCategory() {
+		return idServiceCategory;
+	}
+
+	public void setIdServiceCategory(Integer idServiceCategory) {
+		this.idServiceCategory = idServiceCategory;
+	}
+
+	@Override
+	public String toString() {
+		return "GroupwareRecomendation ["
+				+ (id != null ? "id=" + id + ", " : "")
+				+ (serviceName != null ? "serviceName=" + serviceName + ", "
+						: "")
+				+ (description != null ? "description=" + description + ", "
+						: "")
+				+ (idServiceCategory != null ? "idServiceCategory="
+						+ idServiceCategory : "") + "]";
+	}
 }

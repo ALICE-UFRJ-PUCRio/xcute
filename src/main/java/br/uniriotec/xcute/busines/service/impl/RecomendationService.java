@@ -10,7 +10,7 @@ import br.uniriotec.xcute.busines.entity.ColaborationInfo;
 import br.uniriotec.xcute.busines.entity.GroupwareRecomendation;
 import br.uniriotec.xcute.busines.persistence.ICollaborationRuleDAO;
 import br.uniriotec.xcute.busines.service.IRecomendationService;
-import br.uniriotec.xcute.busines.strategy.CommunicationStrategy;
+import br.uniriotec.xcute.busines.strategy.CommunicationFactory;
 import br.uniriotec.xcute.busines.strategy.RecommendationHelper;
 
 @Service
@@ -42,7 +42,8 @@ public class RecomendationService implements IRecomendationService {
 		RecommendationHelper helper = RecommendationHelper.getInstance();
 		helper.setCollaborationInfos(colaborationInfos);
 		helper.setCommunicationInfos(collaborationRuleDAO.getCardinality(activityId));
-		CommunicationStrategy communication = CommunicationStrategy.getCommunicationStrategy(helper);
+		helper.setCollaborationRuleDAO(collaborationRuleDAO);
+		CommunicationFactory communication = CommunicationFactory.getCommunicationFactory(helper);
 		List<GroupwareRecomendation> recommendation = communication.recomend();
 		return recommendation;
 	}

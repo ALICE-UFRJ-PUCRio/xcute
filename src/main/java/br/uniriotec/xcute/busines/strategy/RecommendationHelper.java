@@ -6,6 +6,7 @@ import org.springframework.util.CollectionUtils;
 
 import br.uniriotec.xcute.busines.entity.ColaborationInfo;
 import br.uniriotec.xcute.busines.entity.ComunicationInfo;
+import br.uniriotec.xcute.busines.persistence.ICollaborationRuleDAO;
 import br.uniriotec.xcute.util.Cardinality;
 
 public class RecommendationHelper {
@@ -13,6 +14,7 @@ public class RecommendationHelper {
 	private static final String EMPTY_STRING = "";  
 	private List<ComunicationInfo> communicationInfos;
 	private List<ColaborationInfo> colaborationInfos;
+	private ICollaborationRuleDAO collaborationRuleDAO;
 
 	private RecommendationHelper() {
 	}
@@ -62,6 +64,26 @@ public class RecommendationHelper {
 			Cardinality.addInteraction(comunicationInfo.getCardinality());
  		}
 		return Cardinality.getCardinalityResult();
+	}
+
+	public ICollaborationRuleDAO getCollaborationRuleDAO() {
+		return collaborationRuleDAO;
+	}
+
+	public void setCollaborationRuleDAO(ICollaborationRuleDAO collaborationRuleDAO) {
+		this.collaborationRuleDAO = collaborationRuleDAO;
+	}
+
+	public List<ColaborationInfo> getColaborationInfos() {
+		return colaborationInfos;
+	}
+
+	public void setColaborationInfos(List<ColaborationInfo> colaborationInfos) {
+		this.colaborationInfos = colaborationInfos;
+	}
+
+	public List<ComunicationInfo> getCommunicationInfos() {
+		return communicationInfos;
 	}
 	
 	
