@@ -12,6 +12,7 @@
 		<result property="comunicationAgentId"  column="agent_comunication_id" />
 		<result property="comunicationAgentName"  column="agent_comunication_name" />
 		<result property="cardinality"  column="cadinality" />
+		<result property="language"  column="language_type" />
 	</resultMap>
 	
 	<resultMap id="collaborationResultBase" type="ColaborationInfo" >
@@ -38,8 +39,7 @@
 	
 	<!-- DECISAO, ALTERNATIVA E QUESTÃO -->
 	<select id="getDecisionInfo" parameterType="int" resultMap="decisionInfoResult">
-		SELECT CONCAT('para as decisoes envolvidas nesta KIA serao necessarios: agente: ',
-			ag.name, ', especialidade: ', sp.name) description, 
+		SELECT CONCAT('agente de inovacao envolvido em decisao') description, 
 			ag.name agent_name, 
 			sp.name speciality_name,
 			kia.al_id id 
@@ -61,9 +61,9 @@
 	<!-- SOCIALIZACÃO -->
     <select id="getSocializationInfo" parameterType="int" resultMap="socializationInfoResult">
 	    select concat('socializacao', 
-	       case when syncrounous = 1 then 'síncrona' when syncrounous = 0 then 'assíncrona' else '' end,  
-	       '. Responsavel pela atividade: ', ag.name) description, 
-	       syncrounous, ag.name agent_name,  sc.collaborativesession_id id
+	       case when syncrounous = 1 then ' sincrona' when syncrounous = 0 then ' assincrona' else '' end) description, 
+	       (case when syncrounous = 1 then true when syncrounous = 0 then false else null end ) syncrounous, 
+	       ag.name agent_name,  sc.collaborativesession_id id
 		from socialization sc
 		inner join activity ac on ac.id = sc.comunicativeinteraction_id
 		inner join agent ag on ag.id = agentid
@@ -73,7 +73,7 @@
 
     <!-- AGENTES ENVOLVIDOS NA COMUNICACAO -->
     <select id="getAgentsInComunication" parameterType="int" resultMap="agentComunicationResult">
-		select concat('agente: ', a.name) description, a.name  agent_name, c.comunicativeinteraction_id id 
+		select concat('agentes envolvidos em comunicacao') description, a.name  agent_name, c.comunicativeinteraction_id id 
 		from  comunicativeinteraction ci
 		inner join comunication c on ci.complexaction_id = c.comunicativeinteraction_id
 		inner join agent a on a.id = sender_agent_id
@@ -82,8 +82,8 @@
 
 	<!-- ATIVIDADES QUE TEM PARTICIPACAO DE RECURSOS -->
     <select id="getResourceParticipation" parameterType="int" resultMap="colaborationSessionResult">
-        select concat('tipo de participacao: ', ' ', p.description,', recurso utilizado: ', r.resourcetype)
-        		description	,
+        select concat('participacao de recursos')
+        		description,
 			 p.description participation_desc, r.resourcetype resource_type, ac.id 
 		from activity ac
 		inner join knowledgeintensiveactivity kia on ac.id = kia.activity_id
@@ -118,6 +118,7 @@
 		   kia.agent_id kia_agent,
 		   ag.id agent_comunication_id,
 		   ag.name agent_comunication_name,
+		   il.languagetype language_type,
 	       case 
 	          when (sa.agent_id is not null) 
 	          then 'Muitos' 
@@ -127,6 +128,8 @@
 		inner join activity ac on ac.id = ci.complexaction_id
 		left outer join knowledgeintensiveactivity  kia on kia.activity_id = ac.id
 		inner join comunication cm on ci.complexaction_id = cm.comunicativeinteraction_id
+		inner join message m on m.id = cm.message_id
+		left outer join idiomaticlanguage il on il.id = m.idiomaticlanguage_id
 		inner join agent ag on ag.id = cm.sender_agent_id
 		left outer join socialagent sa on ag.id = sa.agent_id
 		where ci.complexaction_id = #{id};

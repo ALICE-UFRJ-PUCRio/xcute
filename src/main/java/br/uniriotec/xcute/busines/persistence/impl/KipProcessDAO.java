@@ -40,8 +40,7 @@ public class KipProcessDAO implements IKipProcessDAO {
 	public boolean isCollaborativeActivity(Integer id){
 		return session.getMapper(IKIPMapper.class).isCollaborativeActivity(id)
 			   || isSocialization(id)
-			   || isCollaborativeSession(id)
-			   ;
+			   || isCollaborativeSession(id);
 	}
 
 

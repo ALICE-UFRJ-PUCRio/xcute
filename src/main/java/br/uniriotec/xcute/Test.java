@@ -15,7 +15,6 @@ import br.uniriotec.xcute.busines.persistence.impl.MyBatisConnectionFactory;
 
 public class Test {
 
-	
 	public static void main(String[] args) {
 		
 		SqlSessionFactory sql = MyBatisConnectionFactory.getSqlSessionFactory();

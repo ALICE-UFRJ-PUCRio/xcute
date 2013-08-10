@@ -5,6 +5,12 @@
 <%@ page session="true"%>
 <html>
 <head>
+<style type="text/css">
+   .title {
+      color: 0088cc;
+   }
+</style>
+
 <title>Home</title>
 
 </head>
@@ -29,24 +35,37 @@
 	            </div>
             </c:if>
 
+
+           	 	<table class="table table-striped">
+                   <thead>
+                      <tr>
+                         <th>Tipo de evento</th>
+                         <th>Parcipação de recurso</th>
+                         <th>Participação humana</th>
+                      </tr>
+                   </thead>
+	               <tbody>
+ 
             <c:if test="${not empty kia.id}">
-            <div class="alert alert-block" id="info">
-            <button type="button" class="close" onclick="hide()" data-dismiss="alert">&times;</button>
-            <p>N&atilde;o foram encontradas atividades para este KIP. 
-	            </p>
-	            </div>
+               <%-- CollaborationInfo --%>
+                <c:forEach var="act" items="${kia.collaborationInfo}"  >
+			               <c:if test="${not empty act.id}">
+				               <tr>
+				                  <td> <span class="title"> ${act.description}</span> </td>
+				                  <td>
+				                 <span class="title"> ${act.participationDescription}</span>
+				                  </td>
+				                   <td>
+				                     <span class="title"> ${act.agentName}</span>
+				                   </td>
+				               </tr>
+			               </c:if>
+	                 </c:forEach>
             </c:if>
+			</tbody>
+            	</table>
+            
 
-
-           <!-- c:if test="${not empty kip.id and not empty kip.knowledgeIntensiveActivities}" -->
-           <div class="alert alert-block" id="info"> 
-            <button type="button" class="close" onclick="hide()" data-dismiss="alert">&times;</button>
-	            <p>Foram encontradas as atividades abaixo para este KIP . Todas as atividades colaborativas cont&eacute;m um link para o 
-	               formul&aacute;rio de configura&ccedil;&atilde;o das ferramentas de grupo. 
-	            </p>
-	        </div>
-	             
-           	 <!-- /c:if-->	
 	  	</jsp:body>
 	</t:layout>
 	

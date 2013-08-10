@@ -13,6 +13,8 @@ public class ComunicationInfo {
 	private String comunicationAgentName;
 
 	private String cardinality;
+	
+	private String language;
 
 	public ComunicationInfo() {
 	}
@@ -64,20 +66,31 @@ public class ComunicationInfo {
 	public void setComunicationAgentName(String comunicationAgentName) {
 		this.comunicationAgentName = comunicationAgentName;
 	}
+	
+	
 
 	@Override
 	public String toString() {
 		return "ComunicationInfo ["
-				+ "\n"+ (activityId != null ? "activityId=" + activityId + ", " : "")
-				+ "\n"+ (activityName != null ? "activityName=" + activityName + ", "
+				+ (activityId != null ? "activityId=" + activityId + ", " : "")
+				+ (activityName != null ? "activityName=" + activityName + ", "
 						: "")
-				+ "\n"+ (kiaAgentId != null ? "kiaAgentId=" + kiaAgentId + ", " : "")
-				+ "\n"+ (comunicationAgentId != null ? "comunicationAgentId="
+				+ (kiaAgentId != null ? "kiaAgentId=" + kiaAgentId + ", " : "")
+				+ (comunicationAgentId != null ? "comunicationAgentId="
 						+ comunicationAgentId + ", " : "")
-				+ "\n"+ (comunicationAgentName != null ? "comunicationAgentName="
+				+ (comunicationAgentName != null ? "comunicationAgentName="
 						+ comunicationAgentName + ", " : "")
-				+ "\n"+ (cardinality != null ? "cardinality=" + cardinality : "")
-				+ "]";
+				+ (cardinality != null ? "cardinality=" + cardinality + ", "
+						: "")
+				+ (language != null ? "language=" + language : "") + "]";
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 	
 }
