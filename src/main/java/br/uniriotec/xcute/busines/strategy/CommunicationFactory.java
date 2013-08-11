@@ -31,6 +31,7 @@ public abstract class CommunicationFactory {
 	protected  List<GroupwareRecomendation> list;
 	
 	protected HashMap<String, String> map;
+	private ComunicationInfo comunicationInfo; 
 
 	
 	public CommunicationFactory(RecommendationHelper helper) {
@@ -44,22 +45,13 @@ public abstract class CommunicationFactory {
 	protected abstract List<GroupwareRecomendation> getServiceRecomendation();
 	
 	public List<GroupwareRecomendation>  recomend(){
-		//identifica comunicao
-		initializeResponse();
 		configure();
-		addCommunicationServicesRecomendations(helper.getCommunicationInfos());
-		
-		//identifica cooperacao
-		//identifica coordenaçao
-		
+		addCommunicationServicesRecomendations();
 		return list;
 	}
 	
-	protected void initializeResponse() {
-		if(null == list)
-			list = new ArrayList<GroupwareRecomendation>();
-	}
-
+	
+	
 	protected boolean isUserMultipleInteraction() {
 		return helper.getCommunicationCardinality().isIn(Cardinality.MUITOS_MUITOS, Cardinality.UM_MUITOS);
 	}
@@ -69,7 +61,8 @@ public abstract class CommunicationFactory {
 	}
 
 	public  static CommunicationFactory getCommunicationFactory(RecommendationHelper helper){
-		if(helper.isCollaborationSyncronous())
+		Boolean collaborationSyncronous = helper.isCollaborationSyncronous();
+		if(null != helper && null != collaborationSyncronous && collaborationSyncronous)
 			return new SyncronousRecommendation(helper);
 		else
 			return new AsyncronousRecommendation(helper);
@@ -79,18 +72,35 @@ public abstract class CommunicationFactory {
 		return serviceCategory;
 	}
 
-	protected void addCommunicationServicesRecomendations(List<ComunicationInfo> communicationInfos) {
-		for (ComunicationInfo c : communicationInfos) {
-			map.put(CATEGORY, getServiceCategory()); 
-			map.put(LANGUAGE, c.getLanguage());
+	protected void addCommunicationServicesRecomendations() {
+		for (ComunicationInfo c : helper.getCommunicationInfos()) {
 			List<GroupwareRecomendation> recomendList;
-			if(null != c.getLanguage()){
-				recomendList = getServiceRecomendation();
-				if(null != recomendList)
-					list.addAll(recomendList);	
-			}
+			setComunicationInfo(c);
+			recomendList = getServiceRecomendation();
+			if(null != recomendList)
+				list.addAll(recomendList);	
 			
 		}
+	}
+
+	private void setComunicationInfo(ComunicationInfo comunicationInfo) {
+		this.comunicationInfo = comunicationInfo;
+	}
+
+	public ComunicationInfo getComunicationInfo() {
+		return comunicationInfo;
+	}
+
+	@Override
+	public String toString() {
+		return "CommunicationFactory ["
+				+ (serviceCategory != null ? "serviceCategory="
+						+ serviceCategory + ", " : "")
+				+ (helper != null ? "helper=" + helper + ", " : "")
+				+ (list != null ? "list=" + list + ", " : "")
+				+ (map != null ? "map=" + map + ", " : "")
+				+ (comunicationInfo != null ? "comunicationInfo="
+						+ comunicationInfo : "") + "]";
 	}
 
 	

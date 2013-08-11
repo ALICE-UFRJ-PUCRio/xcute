@@ -64,7 +64,25 @@
             </c:if>
 			</tbody>
             	</table>
-            
+	
+		            
+          <div class="row">
+  <div class="col-lg-3">
+    <div class="thumbnail">
+      <img data-src="holder.js/300x200" alt="">
+      <div class="caption">
+        <h3>Recomendação de serviços de groupware</h3>
+        <ul class="list-group">
+          <c:forEach var="rec" items="${kia.groupwareRecomendation}"  >
+			  <li class="list-group-item">${rec.serviceName}</li>
+          </c:forEach>
+		</ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 	  	</jsp:body>
 	</t:layout>

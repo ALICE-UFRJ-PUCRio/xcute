@@ -2,6 +2,8 @@ package br.uniriotec.xcute.busines.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,18 +20,21 @@ public class RecomendationService implements IRecomendationService {
 	
 	@Autowired
 	private ICollaborationRuleDAO collaborationRuleDAO;
-
 	private List<ColaborationInfo> colaborationInfos;
-
-	private Integer activityId;
-
+	private Integer id;
+	
 	public RecomendationService() {
 	}
 
 	@Override
 	public List<ColaborationInfo> getCollaborationInfo(final Integer id) {
-		this.activityId = id;
-		colaborationInfos = new ArrayList<ColaborationInfo>();
+		this.id = id;
+		colaborationInfos = buildColaborationInformations(id);
+		return colaborationInfos;
+	}
+
+	private List<ColaborationInfo> buildColaborationInformations(final Integer id) {
+		List<ColaborationInfo> colaborationInfos = new ArrayList<ColaborationInfo>();
 		colaborationInfos.addAll(collaborationRuleDAO.getAgentsInComunication(id));
 		colaborationInfos.addAll(collaborationRuleDAO.getDecisionInfo(id));
 		colaborationInfos.addAll(collaborationRuleDAO.getResourceParticipation(id));
@@ -37,18 +42,29 @@ public class RecomendationService implements IRecomendationService {
 		return colaborationInfos;
 	}
 
+
 	@Override
 	public List<GroupwareRecomendation> getRecomendation() {
 		RecommendationHelper helper = RecommendationHelper.getInstance();
-		helper.setCollaborationInfos(colaborationInfos);
-		helper.setCommunicationInfos(collaborationRuleDAO.getCardinality(activityId));
-		helper.setCollaborationRuleDAO(collaborationRuleDAO);
+		helper.setCollaborationRuleDAO(collaborationRuleDAO); 
+		helper.setCollaborationInfos(collaborationRuleDAO.getSocializationInfo(id));
+		helper.setCommunicationInfos(collaborationRuleDAO.getCardinality(id));
 		CommunicationFactory communication = CommunicationFactory.getCommunicationFactory(helper);
-		List<GroupwareRecomendation> recommendation = communication.recomend();
+		List<GroupwareRecomendation> recommendations = recomend(communication); 
+		return recommendations;
+	}
+
+	private List<GroupwareRecomendation> recomend(CommunicationFactory communication) {
+		List<GroupwareRecomendation> recommendation = null;
+		if(communication != null) 
+			recommendation = communication.recomend();
+		Set<GroupwareRecomendation> rec = new TreeSet<GroupwareRecomendation>(recommendation);
+		recommendation = new ArrayList<GroupwareRecomendation>(rec);
 		return recommendation;
 	}
 	
-		
+	
+	
 
 }
 

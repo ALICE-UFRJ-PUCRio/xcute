@@ -1,6 +1,6 @@
 package br.uniriotec.xcute.busines.entity;
 
-public class GroupwareRecomendation {
+public class GroupwareRecomendation implements Comparable<GroupwareRecomendation>{
 
 	private Integer id;
 	
@@ -53,4 +53,11 @@ public class GroupwareRecomendation {
 				+ (idServiceCategory != null ? "idServiceCategory="
 						+ idServiceCategory : "") + "]";
 	}
+
+	
+	@Override
+	public int compareTo(GroupwareRecomendation o) {
+		return this.serviceName.compareTo(o.serviceName);
+	}
+	
 }

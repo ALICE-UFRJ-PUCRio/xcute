@@ -157,7 +157,10 @@
 		inner join wgwsoa_service s  on s.id = sc.service_id
 		left outer join wgwsoa_language l on l.id = c.wgwsoa_language_id
 		where c.description = #{category}
-		and l.description = #{language};
+		<if test="language != null and language != ''">
+    			and l.description = #{language};
+        </if>
+		
 	</select>
 	
 

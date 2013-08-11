@@ -29,6 +29,8 @@ public class SyncronousRecommendation extends CommunicationFactory {
 	
 	@Override
 	protected List<GroupwareRecomendation> getServiceRecomendation() {
+		map.put(CATEGORY, getServiceCategory()); 
+		map.put(LANGUAGE, getComunicationInfo().getLanguage());
 		return helper.getCollaborationRuleDAO().getServiceByCategory(map);
 	}
 	
